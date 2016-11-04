@@ -1,5 +1,6 @@
 %p#notice= notice
-
+= form_for @argument do |f|
+  = react_component 'Argument', versions: argument_versions(@argument)
 
 = link_to 'Edit', edit_argument_path(@argument)
 \|

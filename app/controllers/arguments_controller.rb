@@ -24,7 +24,7 @@ class ArgumentsController < ApplicationController
   # POST /arguments
   # POST /arguments.json
   def create
-    @argument = Argument.new(argument_params)
+    @argument = Argument.new_with_statements(current_user, JSON.parse(argument_params[:statements]))
 
     respond_to do |format|
       if @argument.save
@@ -40,8 +40,12 @@ class ArgumentsController < ApplicationController
   # PATCH/PUT /arguments/1
   # PATCH/PUT /arguments/1.json
   def update
+    statements = JSON.parse(argument_params[:statements]).map {|content| Statement.find_or_initialize_by(content: content)}
+    argument_view = @argument.argument_views.find_or_initialize_by(user:current_user)
+    argument_view.versions.new(statements: statements)
+
     respond_to do |format|
-      if @argument.update(argument_params)
+      if argument_view.save
         format.html { redirect_to @argument, notice: 'Argument was successfully updated.' }
         format.json { render :show, status: :ok, location: @argument }
       else
