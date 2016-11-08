@@ -1,5 +1,5 @@
 class ArgumentsController < ApplicationController
-  before_action :set_argument, only: [:show, :edit, :update, :destroy]
+  before_action :set_argument, only: [:show, :edit, :update]
 
   # GET /arguments
   # GET /arguments.json
@@ -15,10 +15,6 @@ class ArgumentsController < ApplicationController
   # GET /arguments/new
   def new
     @argument = Argument.new
-  end
-
-  # GET /arguments/1/edit
-  def edit
   end
 
   # POST /arguments
@@ -52,16 +48,6 @@ class ArgumentsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @argument.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /arguments/1
-  # DELETE /arguments/1.json
-  def destroy
-    @argument.destroy
-    respond_to do |format|
-      format.html { redirect_to arguments_url, notice: 'Argument was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 
