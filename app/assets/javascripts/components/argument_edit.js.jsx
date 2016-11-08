@@ -11,7 +11,7 @@ var ArgumentEdit = React.createClass({
             return <StatementEdit statement={statement} autoFocus={this.props.activeStatement == index} updateStatement={this.updateStatement.bind(this, index)} key={index} />;
           }.bind(this))
         }
-        <a onClick={this.newStatement} href="javascript:">Add statement</a>
+        <a onClick={this.props.newStatement} href="javascript:">Add statement</a>
         <input type="submit" name="commit" value="Save version" />
       </div>
     );

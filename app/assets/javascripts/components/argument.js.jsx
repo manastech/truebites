@@ -8,7 +8,6 @@ var Argument = React.createClass({
   },
 
   newStatement: function() {
-    debugger;
     this.setState(React.addons.update(this.state, {
       myVersion: { $push: [ "" ] }
     }));
@@ -61,7 +60,7 @@ var Argument = React.createClass({
     return (
       <div className="argument">
         <input type="hidden" name="argument[statements]" value={this.saveArgument()} />
-        <VersionsList versions={this.props.versions} activeVersion={this.state.activeVersion} changeActiveVersion={this.changeActiveVersion} currentVersion={this.state.myVersion} />
+        <VersionsList versions={this.props.versions} currentUser={this.props.currentUser} activeVersion={this.state.activeVersion} changeActiveVersion={this.changeActiveVersion} currentVersion={this.state.myVersion} />
         {currentArgument}
       </div>
     );
