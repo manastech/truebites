@@ -2,23 +2,27 @@ var Argument = React.createClass({
   getInitialState: function() {
     return {
       activeVersion: this.props.versions.length - 1,
-      activeStatement: 0,
       myVersion: []
     };
   },
 
   newStatement: function() {
-    this.setState(React.addons.update(this.state, {
-      myVersion: { $push: [ "" ] }
-    }));
+    this.updateState({ myVersion: { $push: [ "" ] } });
   },
 
   updateStatement: function(statementIndex, newContent) {
-    this.setState(React.addons.update(this.state, {
-      myVersion: {
-        [statementIndex]: {$set: newContent }
-      }
-    }));
+    this.updateState({ myVersion: {
+      [statementIndex]: {$set: newContent }
+    }});
+  },
+
+  updateStatementAndStartEditing: function(statementIndex, newContent) {
+    var newStatements = this.currentStatements();
+    newStatements[statementIndex] = newContent;
+    this.updateState({
+      myVersion: { $set: newStatements },
+      activeVersion: { $set: -1 },
+    });
   },
 
   saveArgument: function() {
@@ -26,36 +30,59 @@ var Argument = React.createClass({
   },
 
   changeActiveVersion: function(newActiveVersionIndex) {
-    this.setState(React.addons.update(this.state, {
-      activeVersion: { $set: newActiveVersionIndex }
-    }));
-  },
-
-  editArgument: function(statementIndex, newStatement) {
-    var newStatements = this.props.versions[this.state.activeVersion].statements.slice(0);
-    newStatements[statementIndex] = newStatement;
-    this.setState(React.addons.update(this.state, {
-      myVersion: { $set: newStatements },
-      activeVersion: { $set: -1 },
-      activeStatement: { $set: statementIndex },
-    }));
+    this.updateState({ activeVersion: { $set: newActiveVersionIndex } });
   },
 
   addStatementAndStartEditing: function() {
-    var newStatements = this.props.versions[this.state.activeVersion].statements.concat([""]);
-    this.setState(React.addons.update(this.state, {
+    var newStatements = this.currentStatements().concat([""]);
+    this.updateState({
       myVersion: { $set: newStatements },
       activeVersion: { $set: -1 },
-      activeStatement: { $set: newStatements.length - 1 },
-    }));
+    });
+  },
+
+  swapStatements: function(oneStatementIndex, otherStatementIndex) {
+    var newStatements = this.currentStatements();
+    var temporal = newStatements[oneStatementIndex];
+    newStatements[oneStatementIndex] = newStatements[otherStatementIndex];
+    newStatements[otherStatementIndex] = temporal;
+    this.updateState({ myVersion: { $set: newStatements } });
+  },
+
+  swapStatementsAndStartEditing: function(oneStatementIndex, otherStatementIndex) {
+    var newStatements = this.currentStatements();
+    var temporal = newStatements[oneStatementIndex];
+    newStatements[oneStatementIndex] = newStatements[otherStatementIndex];
+    newStatements[otherStatementIndex] = temporal;
+    this.updateState({ myVersion: { $set: newStatements }, activeVersion: { $set: -1 } });
+  },
+
+  deleteStatement: function(statementIndex) {
+    var newStatements = this.currentStatements();
+    newStatements.splice(statementIndex, 1);
+    this.updateState({myVersion: { $set: newStatements }});
+  },
+
+  deleteStatementAndStartEditing: function(statementIndex) {
+    var newStatements = this.currentStatements();
+    newStatements.splice(statementIndex, 1);
+    this.updateState({myVersion: { $set: newStatements }, activeVersion: {$set: -1}});
+  },
+
+  updateState: function(changesToApply) {
+    this.setState(React.addons.update(this.state, changesToApply))
+  },
+
+  currentStatements: function() {
+    return (this.state.activeVersion >= 0 ? this.props.versions[this.state.activeVersion].statements : this.state.myVersion).slice(0);
   },
 
   render: function() {
     var currentArgument = null;
     if(this.state.activeVersion >= 0) {
-      currentArgument = <ArgumentView statements={this.props.versions[this.state.activeVersion].statements} editArgument={this.editArgument} newStatement={this.addStatementAndStartEditing} />
+      currentArgument = <ArgumentEdit statements={this.props.versions[this.state.activeVersion].statements} updateStatement={this.updateStatementAndStartEditing} newStatement={this.addStatementAndStartEditing} swapStatements={this.swapStatementsAndStartEditing} deleteStatement={this.deleteStatementAndStartEditing} />
     } else {
-      currentArgument = <ArgumentEdit statements={this.state.myVersion} activeStatement={this.state.activeStatement} updateStatement={this.updateStatement} newStatement={this.newStatement} />
+      currentArgument = <ArgumentEdit statements={this.state.myVersion} updateStatement={this.updateStatement} newStatement={this.newStatement} swapStatements={this.swapStatements} deleteStatement={this.deleteStatement} />
     }
     return (
       <div className="argument">
