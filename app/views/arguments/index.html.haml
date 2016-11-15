@@ -10,7 +10,7 @@
   %tbody
     - @arguments.each do |argument|
       %tr
-        %td= link_to 'Show', argument
+        %td= link_to argument.last_conclusion, argument
 
 %br
 

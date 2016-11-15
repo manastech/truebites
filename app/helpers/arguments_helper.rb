@@ -6,7 +6,7 @@ module ArgumentsHelper
         version_id: version.id,
         user: { id: version.user.id, name: version.user.name },
         lastmod: version.created_at,
-        statements: version.statements.map(&:content)
+        statements: version.statements.map(&:content) + [version.conclusion]
       }
     }
   end

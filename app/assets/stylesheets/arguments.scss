@@ -6,4 +6,10 @@
   .statementEdit {
     width: 400px;
   }
+
+  &:last-of-type {
+    .statementEdit {
+      font-weight: bold;
+    }
+  }
 }

@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161025195017) do
+ActiveRecord::Schema.define(version: 20161108202120) do
 
   create_table "argument_view_versions", force: :cascade do |t|
     t.integer  "argument_view_id"
     t.integer  "previous_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.text     "conclusion"
   end
 
   add_index "argument_view_versions", ["argument_view_id"], name: "index_argument_view_versions_on_argument_view_id"
