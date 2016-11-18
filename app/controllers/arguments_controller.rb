@@ -20,7 +20,7 @@ class ArgumentsController < ApplicationController
   # POST /arguments
   # POST /arguments.json
   def create
-    @argument = Argument.new_with_statements(current_user, JSON.parse(argument_params[:statements]))
+    @argument = Argument.new_with_params(argument_params.permit(:title, :description), current_user, JSON.parse(argument_params[:statements]))
 
     respond_to do |format|
       if @argument.save
