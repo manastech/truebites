@@ -38,7 +38,7 @@ class ArgumentsController < ApplicationController
   def update
     statements = JSON.parse(argument_params[:statements])
     conclusion = statements.pop
-    statements = statements.map {|content| Statement.find_or_initialize_by(content: content)}
+    statements = statements.map {|content| Statement.find_or_initialize_by(content: content, argument: @argument)}
     argument_view = @argument.argument_views.find_or_initialize_by(user:current_user)
     argument_view.versions.new(statements: statements, conclusion: conclusion)
 

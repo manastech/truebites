@@ -9,7 +9,7 @@ class Argument < ActiveRecord::Base
     argument = self.new params
     view = argument.argument_views.new user: user
     conclusion = statements.pop
-    statements_objects = statements.map {|content| Statement.find_or_initialize_by content: content }
+    statements_objects = statements.map {|content| Statement.find_or_initialize_by content: content, argument: argument }
     view.versions.new statements: statements_objects, conclusion: conclusion
     argument
   end

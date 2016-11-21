@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116174258) do
+ActiveRecord::Schema.define(version: 20161121173829) do
 
   create_table "argument_view_version_statements", force: :cascade do |t|
     t.integer "argument_view_version_id"
@@ -69,11 +69,13 @@ ActiveRecord::Schema.define(version: 20161116174258) do
 
   create_table "statements", force: :cascade do |t|
     t.text     "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "argument_id"
   end
 
-  add_index "statements", ["content"], name: "index_statements_on_content", unique: true
+  add_index "statements", ["argument_id", "content"], name: "index_statements_on_argument_id_and_content", unique: true
+  add_index "statements", ["argument_id"], name: "index_statements_on_argument_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
