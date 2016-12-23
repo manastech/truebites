@@ -80,9 +80,9 @@ var Argument = React.createClass({
   render: function() {
     var currentArgument = null;
     if(this.state.activeVersion >= 0) {
-      currentArgument = <ArgumentEdit statements={this.props.versions[this.state.activeVersion].statements} updateStatement={this.updateStatementAndStartEditing} newStatement={this.addStatementAndStartEditing} swapStatements={this.swapStatementsAndStartEditing} deleteStatement={this.deleteStatementAndStartEditing} />
+      currentArgument = <ArgumentEdit statements={this.props.versions[this.state.activeVersion].statements} updateStatement={this.updateStatementAndStartEditing} newStatement={this.addStatementAndStartEditing} swapStatements={this.swapStatementsAndStartEditing} deleteStatement={this.deleteStatementAndStartEditing} otherUser={this.props.versions[this.state.activeVersion].user.id != this.props.currentUser} votes={this.props.statementVotes} />
     } else {
-      currentArgument = <ArgumentEdit statements={this.state.myVersion} updateStatement={this.updateStatement} newStatement={this.newStatement} swapStatements={this.swapStatements} deleteStatement={this.deleteStatement} />
+      currentArgument = <ArgumentEdit statements={this.state.myVersion} updateStatement={this.updateStatement} newStatement={this.newStatement} swapStatements={this.swapStatements} deleteStatement={this.deleteStatement} votes={this.props.statementVotes}/>
     }
     return (
       <div className="argument">
